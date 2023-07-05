@@ -1,0 +1,30 @@
+{
+  "name": "shri2023-task",
+  "version": "1.0.0",
+  "description": "yandex-shri-23 performance hw",
+  "main": "./src/index.jsx",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/redaktorscha/shri2023-task.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/redaktorscha/shri2023-task/issues"
+  },
+  "homepage": "https://github.com/redaktorscha/shri2023-task#readme",
+  "dependencies": {
+    "@vitejs/plugin-react": "^4.0.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "vite": "^4.3.9"
+  }
+}
