@@ -20,7 +20,7 @@
   "bugs": {
     "url": "https://github.com/redaktorscha/shri2023-task/issues"
   },
-  "homepage": "https://github.com/redaktorscha/shri2023-task#readme",
+  "homepage": "https://redaktorscha.github.io/shri2023-task/",
   "dependencies": {
     "@vitejs/plugin-react": "^4.0.1",
     "react": "^18.2.0",
