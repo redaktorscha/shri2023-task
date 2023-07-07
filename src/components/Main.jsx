@@ -1,31 +1,34 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect } from "react";
 
 import { Event } from "./Event.jsx";
 import { TABS, TABS_KEYS } from "./tabs.js";
 
-const TAB_WIDTH = 200;
-
 export function Main() {
   const ref = useRef();
-  const [activeTab, setActiveTab] = useState("all");
-  const [hasRightScroll, setHasRightScroll] = useState(true);
-  const [total, setTotal] = useState(
-    () => TABS[activeTab].items.length * TAB_WIDTH
-  );
+  const initedRef = useRef(false);
+  const [activeTab, setActiveTab] = useState("");
+  const [hasRightScroll, setHasRightScroll] = useState(false);
 
-  const onTabClick = useCallback((key) => {
-    setActiveTab(key);
-    setTotal(() => TABS[key].items.length * TAB_WIDTH);
+  useEffect(() => {
+    if (!activeTab && !initedRef.current) {
+      initedRef.current = true;
+      setActiveTab(new URLSearchParams(location.search).get("tab") || "all");
+    }
   });
 
   const onSelectInput = useCallback((event) => {
     setActiveTab(event.target.value);
-    setTotal(() => TABS[event.target.value].items.length * TAB_WIDTH);
   });
 
 
   useEffect(() => {
-    setHasRightScroll(total > ref.current.offsetWidth);
+    const sumWidth = sizes.reduce((acc, item) => acc + item.width, 0);
+    const sumHeight = sizes.reduce((acc, item) => acc + item.height, 0);
+
+    const newHasRightScroll = sumWidth > ref.current.offsetWidth;
+    if (newHasRightScroll !== hasRightScroll) {
+      setHasRightScroll(newHasRightScroll);
+    }
   });
 
   const onArrowCLick = useCallback(() => {
@@ -166,7 +169,7 @@ export function Main() {
                 }
                 id={`tab_${key}`}
                 aria-controls={`panel_${key}`}
-                onClick={() => onTabClick(key)}
+                onClick={() => setActiveTab(key)}
               >
                 {TABS[key].title}
               </li>
