@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 
 import { Event } from "./Event.jsx";
 import { TABS, TABS_KEYS } from "./tabs.js";
@@ -20,10 +20,13 @@ export function Main() {
     setActiveTab(event.target.value);
   });
 
+  let sizes = [];
+  const onSize = (size) => {
+    sizes = [...sizes, size];
+  };
 
   useEffect(() => {
     const sumWidth = sizes.reduce((acc, item) => acc + item.width, 0);
-    const sumHeight = sizes.reduce((acc, item) => acc + item.height, 0);
 
     const newHasRightScroll = sumWidth > ref.current.offsetWidth;
     if (newHasRightScroll !== hasRightScroll) {
@@ -192,7 +195,7 @@ export function Main() {
             >
               <ul className="section__panel-list">
                 {TABS[key].items.map((item, index) => (
-                  <Event key={index} {...item} />
+                  <Event key={index} {...item} onSize={onSize}/>
                 ))}
               </ul>
             </div>
