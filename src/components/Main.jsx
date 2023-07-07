@@ -1,41 +1,34 @@
-import React from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 
 import { Event } from "./Event.jsx";
 import { TABS, TABS_KEYS } from "./tabs.js";
 
+const TAB_WIDTH = 200;
+
 export function Main() {
-  const ref = React.useRef();
-  const initedRef = React.useRef(false);
-  const [activeTab, setActiveTab] = React.useState("");
-  const [hasRightScroll, setHasRightScroll] = React.useState(false);
+  const ref = useRef();
+  const [activeTab, setActiveTab] = useState("all");
+  const [hasRightScroll, setHasRightScroll] = useState(true);
+  const [total, setTotal] = useState(
+    () => TABS[activeTab].items.length * TAB_WIDTH
+  );
 
-  React.useEffect(() => {
-    if (!activeTab && !initedRef.current) {
-      initedRef.current = true;
-      setActiveTab(new URLSearchParams(location.search).get("tab") || "all");
-    }
+  const onTabClick = useCallback((key) => {
+    setActiveTab(key);
+    setTotal(() => TABS[key].items.length * TAB_WIDTH);
   });
 
-  const onSelectInput = (event) => {
+  const onSelectInput = useCallback((event) => {
     setActiveTab(event.target.value);
-  };
-
-  let sizes = [];
-  const onSize = (size) => {
-    sizes = [...sizes, size];
-  };
-
-  React.useEffect(() => {
-    const sumWidth = sizes.reduce((acc, item) => acc + item.width, 0);
-    const sumHeight = sizes.reduce((acc, item) => acc + item.height, 0);
-
-    const newHasRightScroll = sumWidth > ref.current.offsetWidth;
-    if (newHasRightScroll !== hasRightScroll) {
-      setHasRightScroll(newHasRightScroll);
-    }
+    setTotal(() => TABS[event.target.value].items.length * TAB_WIDTH);
   });
 
-  const onArrowCLick = () => {
+
+  useEffect(() => {
+    setHasRightScroll(total > ref.current.offsetWidth);
+  });
+
+  const onArrowCLick = useCallback(() => {
     const scroller = ref.current.querySelector(
       ".section__panel:not(.section__panel_hidden)"
     );
@@ -45,7 +38,7 @@ export function Main() {
         behavior: "smooth",
       });
     }
-  };
+  });
 
   return (
     <main className="main">
@@ -173,7 +166,7 @@ export function Main() {
                 }
                 id={`tab_${key}`}
                 aria-controls={`panel_${key}`}
-                onClick={() => setActiveTab(key)}
+                onClick={() => onTabClick(key)}
               >
                 {TABS[key].title}
               </li>
@@ -196,7 +189,7 @@ export function Main() {
             >
               <ul className="section__panel-list">
                 {TABS[key].items.map((item, index) => (
-                  <Event key={index} {...item} onSize={onSize} />
+                  <Event key={index} {...item} />
                 ))}
               </ul>
             </div>
