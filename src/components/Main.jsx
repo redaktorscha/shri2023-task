@@ -1,15 +1,15 @@
-import React from "react";
+import { useState, useRef, useEffect } from "react";
 
 import { Event } from "./Event.jsx";
 import { TABS, TABS_KEYS } from "./tabs.js";
 
 export function Main() {
-  const ref = React.useRef();
-  const initedRef = React.useRef(false);
-  const [activeTab, setActiveTab] = React.useState("");
-  const [hasRightScroll, setHasRightScroll] = React.useState(false);
+  const ref = useRef();
+  const initedRef = useRef(false);
+  const [activeTab, setActiveTab] = useState("");
+  const [hasRightScroll, setHasRightScroll] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!activeTab && !initedRef.current) {
       initedRef.current = true;
       setActiveTab(new URLSearchParams(location.search).get("tab") || "all");
@@ -25,7 +25,7 @@ export function Main() {
     sizes = [...sizes, size];
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     const sumWidth = sizes.reduce((acc, item) => acc + item.width, 0);
     const sumHeight = sizes.reduce((acc, item) => acc + item.height, 0);
 
